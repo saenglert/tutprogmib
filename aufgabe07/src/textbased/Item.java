@@ -1,7 +1,5 @@
 package textbased;
 
-import java.util.Vector;
-
 public class Item {
     private static int counter = 0;
     private final int id;

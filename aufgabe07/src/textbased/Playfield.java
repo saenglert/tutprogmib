@@ -28,8 +28,10 @@ public class Playfield {
         int rand = activeRoom;
 
         while (rand == activeRoom) {
-            rand = (int) Math.round(Math.random() * this.rooms.size());
+            rand = (int) Math.round(Math.random() * (this.rooms.size() - 1));
         }
+
+        activeRoom = rand;
     }
 
     public void add(Room room) {

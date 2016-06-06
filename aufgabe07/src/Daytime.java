@@ -22,7 +22,7 @@ public class Daytime {
 
     public void setMinutes(int minutes) {
         if (minutes >= 0) {
-            if (minutes < 60) this.minutes = minutes;
+            if (minutes < 60) this.minutes = minutes % 24;
             else {
                 this.hours += minutes / 60;
                 this.minutes = minutes % 60;

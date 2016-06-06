@@ -1,42 +1,95 @@
 package textbased;
 
 import java.io.*;
+import java.util.Vector;
 
 public class Game {
+    // Hält den Zustand des Spiels (wahr = läuft, falsch = ende)
     private static boolean running = true;
 
+    // Das Spielfeld. Hält alle Informationen die zu den Räumen gehören die der Spieler besuchen kann
     private static Playfield playfield;
+
+    // Inventar des Spielers
     private static Inventory inventory;
 
 
     public static void main(String[] args) {
         Game.setup();
 
+        // Sog. Game Loop, der immer wieder ausgeführt wird solange das Spiel läuft (running =  true)
         while (running) {
+
+            // Ein BufferedReader liest eingehende Informationen (System.in) und bringt sie in ein lesbares Format
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
             System.out.println("####################");
+            // Ausgabe des aktuellen Raumes in de der Spieler ist
             System.out.println("You are in the " + Game.playfield.getActiveRoom().name);
             System.out.println("####################");
+            // Ausgabe des Flavour Textes für den aktuellen Raum
             System.out.println(Game.playfield.getActiveRoom().description);
             System.out.println("What do you want to do?");
 
+            // Ein Try - Block versucht die Anweisungen zwischen den Klammern auszuführen
+            // geht etwas schief wird der Catch-Block ausgeführt
             try {
+                // Message enthält die Eingabe auf der Konsole
                 String message = in.readLine();
+
+                // Abhängig davon was der User eingibt wollen wir etwas tun
                 switch (message) {
+                    // Quit beended das Spiel, d.h. running wird auf false gesetzt
                     case "q":
                     case "quit":
                         System.out.println("See you on the other side ...");
                         Game.running = false;
                         break;
+                    // Look soll anzeigen was sich aktuell im Raum befindet
+                    case "l":
+                    case "look":
+                        Game.look();
+                        break;
+
+                    // Change soll den aktuellen Raum wechseln
+                    case "c":
+                    case "change":
+                        Game.change();
+                        break;
+                    // Wenn irgend ein Quatsch eingegebn wird ...
                     default:
                         System.out.println("Invalid Command. Input was: " + message);
                         System.out.println("Commands include: look, take, drop, inventory, change, quit");
+                        break;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static void change() {
+        playfield.changeToRandomRoom();
+    }
+
+    // Zeige alle Items im aktuellen Raum an
+    private static void look() {
+        // Alle Items aus dem aktuellen Raum
+        Vector<Item> items = playfield.getActiveRoom().inventory.getItems();
+
+        // Wenn wir mehr als 0 Items haben ...
+        if (items.size() > 0) {
+
+            // .. gibt alle Items eins nach dem anderen aus
+            System.out.println("In this room you see:");
+            for (int i = 0; i < items.size(); i++) {
+                // Name des Items
+                System.out.println(items.elementAt(i).name);
+                // Beschreibung des Items
+                System.out.println("    " + items.elementAt(i).description);
+            }
+            // Wenn keine Items im Raum sind
+        } else System.out.println("This room seems empty.");
     }
 
     private static void setup() {

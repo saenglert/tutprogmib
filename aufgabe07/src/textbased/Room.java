@@ -1,16 +1,14 @@
 package textbased;
 
-import java.util.Vector;
-
 public class Room {
     String description;
     String name;
-    Inventory items;
+    Inventory inventory;
 
-    Room (String name, String description, Inventory items) {
+    Room (String name, String description, Inventory inventory) {
         this.name = name;
         this.description = description;
-        this.items = items;
+        this.inventory = inventory;
     }
 
 }
